@@ -84,7 +84,7 @@ class DashboardScreen extends StatelessWidget {
               const Text(
                 'Bienvenido a ContaSync',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -96,13 +96,15 @@ class DashboardScreen extends StatelessWidget {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   children: [
-                    _buildAnimatedMenuItem('Próximos Vencimientos', Icons.event, Colors.red.shade400),
-                    _buildAnimatedMenuItem('Últimas Noticias', Icons.newspaper, Colors.blue.shade400),
-                    _buildAnimatedMenuItem('Recordatorios', Icons.alarm, Colors.orange.shade400),
-                    _buildAnimatedMenuItem('Calendario', Icons.calendar_today, Colors.green.shade400),
+                    _buildAnimatedMenuItem(context, 'Próximos Vencimientos', Icons.event, Colors.red.shade400, () => _showVencimientos(context)),
+                    _buildAnimatedMenuItem(context, 'Últimas Noticias', Icons.newspaper, Colors.blue.shade400, () => _showNoticias(context)),
+                    _buildAnimatedMenuItem(context, 'Recordatorios', Icons.alarm, Colors.orange.shade400, () => _showRecordatorios(context)),
+                    _buildAnimatedMenuItem(context, 'Calendario', Icons.calendar_today, Colors.green.shade400, () => _showCalendario(context)),
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
+              _buildResumenCard(),
             ],
           ),
         ),
@@ -110,7 +112,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedMenuItem(String title, IconData icon, Color color) {
+  Widget _buildAnimatedMenuItem(BuildContext context, String title, IconData icon, Color color, VoidCallback onTap) {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
       duration: const Duration(milliseconds: 500),
@@ -118,23 +120,22 @@ class DashboardScreen extends StatelessWidget {
         return Transform.scale(
           scale: value,
           child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            elevation: 8,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             color: Colors.white,
             child: InkWell(
-              onTap: () {
-                // Navegar a la pantalla correspondiente
-              },
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, size: 50, color: color),
-                  const SizedBox(height: 8),
+                  Icon(icon, size: 60, color: color),
+                  const SizedBox(height: 12),
                   Text(
                     title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800],
                     ),
@@ -143,6 +144,109 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Widget _buildResumenCard() {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Resumen del día',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const Text('• 2 vencimientos próximos'),
+            const Text('• 3 nuevas noticias contables'),
+            const Text('• 1 recordatorio pendiente'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showVencimientos(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Próximos Vencimientos'),
+          content: const Text('Aquí se mostrarían los próximos vencimientos.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showNoticias(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Últimas Noticias'),
+          content: const Text('Aquí se mostrarían las últimas noticias contables.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showRecordatorios(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Recordatorios'),
+          content: const Text('Aquí se mostrarían los recordatorios pendientes.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showCalendario(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Calendario'),
+          content: const Text('Aquí se mostraría un resumen del calendario.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
