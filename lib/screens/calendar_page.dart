@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../database/database_helper.dart';
+
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
 
@@ -13,6 +15,26 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  List<Map<String, dynamic>> _selectedEvents = [];
+  TimeOfDay _selectedTime = TimeOfDay.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = _focusedDay;
+    _loadEvents();
+  }
+
+  void _loadEvents() async {
+    if (_selectedDay != null) {
+      final events = await DatabaseHelper.instance.getRecordatoriosPorFecha(
+        DateFormat('yyyy-MM-dd').format(_selectedDay!),
+      );
+      setState(() {
+        _selectedEvents = events;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +59,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
               });
+              _loadEvents();
             },
             onFormatChanged: (format) {
               setState(() {
@@ -63,35 +86,119 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           const SizedBox(height: 20),
           Expanded(
-            child: Center(
-              child: _selectedDay == null
-                  ? const Text('Selecciona un día para ver eventos')
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Día seleccionado: ${DateFormat('dd/MM/yyyy').format(_selectedDay!)}',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                            'Aquí se mostrarían los eventos del día seleccionado'),
-                      ],
-                    ),
-            ),
+            child: _selectedEvents.isEmpty
+                ? const Center(child: Text('No hay eventos para este día'))
+                : ListView.builder(
+                    itemCount: _selectedEvents.length,
+                    itemBuilder: (context, index) {
+                      final event = _selectedEvents[index];
+                      final eventDateTime =
+                          DateTime.parse('${event['fecha']} ${event['hora']}');
+                      final timeUntil =
+                          eventDateTime.difference(DateTime.now());
+                      return ListTile(
+                        title: Text(event['titulo']),
+                        subtitle:
+                            Text('${event['hora']} - ${event['descripcion']}'),
+                        trailing: Text(_formatTimeUntil(timeUntil)),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Aquí iría la lógica para agregar un nuevo evento
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Función para agregar evento')),
-          );
-        },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.add),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: FloatingActionButton(
+          onPressed: _showAddEventDialog,
+          backgroundColor: Colors.deepPurple,
+          child: const Icon(Icons.add),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    );
+  }
+
+  String _formatTimeUntil(Duration duration) {
+    if (duration.isNegative) {
+      return 'Pasado';
+    } else if (duration.inDays > 0) {
+      return 'En ${duration.inDays} días';
+    } else if (duration.inHours > 0) {
+      return 'En ${duration.inHours} horas';
+    } else if (duration.inMinutes > 0) {
+      return 'En ${duration.inMinutes} minutos';
+    } else {
+      return 'Ahora';
+    }
+  }
+
+  void _showAddEventDialog() {
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Agregar Recordatorio'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(labelText: 'Título'),
+              ),
+              TextField(
+                controller: descriptionController,
+                decoration: const InputDecoration(labelText: 'Descripción'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  final TimeOfDay? time = await showTimePicker(
+                    context: context,
+                    initialTime: _selectedTime,
+                    builder: (BuildContext context, Widget? child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: true),
+                        child: child!,
+                      );
+                    },
+                  );
+                  if (time != null) {
+                    setState(() {
+                      _selectedTime = time;
+                    });
+                  }
+                },
+                child: Text(_selectedTime.format(context)),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final newEvent = {
+                'titulo': titleController.text,
+                'descripcion': descriptionController.text,
+                'fecha': DateFormat('yyyy-MM-dd').format(_selectedDay!),
+                'hora':
+                    '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
+              };
+              await DatabaseHelper.instance.insertRecordatorio(newEvent);
+              Navigator.pop(context);
+              _loadEvents();
+            },
+            child: const Text('Guardar'),
+          ),
+        ],
       ),
     );
   }

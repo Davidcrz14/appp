@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'screens/splash_screen.dart';
 import 'screens/home_page.dart';
+import 'screens/login_page.dart'; // Asegúrate de tener este archivo
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-    );
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'ContaSync',
+      title: 'Mi Aplicación',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/login': (context) => LoginPage(),
+        '/home': (context) => HomePage(),
+      },
     );
   }
 }
