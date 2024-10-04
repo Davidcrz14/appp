@@ -8,7 +8,7 @@ class NewsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Noticias Contables'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
       body: ListView(
@@ -47,7 +47,8 @@ class NewsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNewsCard(BuildContext context, String title, String content, IconData icon, Color color) {
+  Widget _buildNewsCard(BuildContext context, String title, String content,
+      IconData icon, Color color) {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 16),

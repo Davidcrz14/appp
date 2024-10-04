@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../database/database_helper.dart';
+import '../widgets/recordatorio_detail_dialog.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -41,7 +42,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendario'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
       body: Column(
@@ -101,6 +102,17 @@ class _CalendarPageState extends State<CalendarPage> {
                         subtitle:
                             Text('${event['hora']} - ${event['descripcion']}'),
                         trailing: Text(_formatTimeUntil(timeUntil)),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => RecordatorioDetailDialog(
+                              recordatorio: event,
+                              onDelete: () {
+                                _loadEvents();
+                              },
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

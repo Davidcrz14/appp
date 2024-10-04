@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+
+import 'database/database_helper.dart';
 import 'screens/splash_screen.dart';
 import 'screens/home_page.dart';
-import 'screens/login_page.dart'; // Asegúrate de tener este archivo
 
-void main() {
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (args.contains('--delete-db')) {
+    await DatabaseHelper.instance.deleteDatabase();
+    print('Base de datos eliminada');
+    return;
+  }
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,12 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => SplashScreen(),
-        '/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(),
-      },
+      home: const SplashScreen(),
     );
   }
 }

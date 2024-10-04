@@ -1,5 +1,6 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'dart:io';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -42,13 +43,30 @@ class DatabaseHelper {
     return await db.query('recordatorios', orderBy: 'fecha ASC, hora ASC');
   }
 
-  Future<List<Map<String, dynamic>>> getRecordatoriosPorFecha(String fecha) async {
+  Future<List<Map<String, dynamic>>> getRecordatoriosPorFecha(
+      String fecha) async {
     final db = await instance.database;
-    return await db.query('recordatorios', where: 'fecha = ?', whereArgs: [fecha], orderBy: 'hora ASC');
+    return await db.query('recordatorios',
+        where: 'fecha = ?', whereArgs: [fecha], orderBy: 'hora ASC');
   }
 
   Future<int> deleteRecordatorio(int id) async {
     final db = await instance.database;
     return await db.delete('recordatorios', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Nuevo método para eliminar la base de datos
+  Future<void> deleteDatabase() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'recordatorios.db');
+
+    await close();
+    await File(path).delete();
+  }
+
+  Future<void> close() async {
+    final db = await instance.database;
+    db.close();
+    _database = null;
   }
 }

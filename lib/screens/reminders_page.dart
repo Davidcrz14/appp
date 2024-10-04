@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../database/database_helper.dart';
-import 'package:intl/intl.dart';
+import '../widgets/recordatorio_detail_dialog.dart';
 
 class RemindersPage extends StatefulWidget {
   const RemindersPage({super.key});
@@ -30,38 +31,65 @@ class _RemindersPageState extends State<RemindersPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Recordatorios'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: _recordatorios.length,
-        itemBuilder: (context, index) {
-          final recordatorio = _recordatorios[index];
-          final eventDateTime = DateTime.parse('${recordatorio['fecha']} ${recordatorio['hora']}');
-          final timeUntil = eventDateTime.difference(DateTime.now());
+      body: _recordatorios.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.event_available,
+                    size: 100,
+                    color: Colors.teal.withOpacity(0.5),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Por el momento no tienes\nrecordatorios pendientes',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: _recordatorios.length,
+              itemBuilder: (context, index) {
+                final recordatorio = _recordatorios[index];
+                final eventDateTime = DateTime.parse(
+                    '${recordatorio['fecha']} ${recordatorio['hora']}');
+                final timeUntil = eventDateTime.difference(DateTime.now());
 
-          return _buildReminderCard(
-            recordatorio['titulo'],
-            '${recordatorio['fecha']} ${recordatorio['hora']}',
-            Icons.event,
-            Colors.deepPurple,
-            timeUntil,
-            recordatorio['descripcion'],
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Aquí podrías navegar a la página de calendario para agregar un nuevo recordatorio
-        },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.add),
-      ),
+                return _buildReminderCard(
+                  recordatorio['titulo'],
+                  '${recordatorio['fecha']} ${recordatorio['hora']}',
+                  Icons.event,
+                  Colors.deepPurple,
+                  timeUntil,
+                  recordatorio['descripcion'],
+                  () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => RecordatorioDetailDialog(
+                        recordatorio: recordatorio,
+                        onDelete: () {
+                          _loadRecordatorios();
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 
-  Widget _buildReminderCard(
-      String title, String time, IconData icon, Color color, Duration timeUntil, String description) {
+  Widget _buildReminderCard(String title, String time, IconData icon,
+      Color color, Duration timeUntil, String description, VoidCallback onTap) {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -88,6 +116,7 @@ class _RemindersPageState extends State<RemindersPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        onTap: onTap,
       ),
     );
   }

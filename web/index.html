@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -15,94 +17,110 @@
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="prueba">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
-
-  <title>prueba</title>
-  <link rel="manifest" href="manifest.json">
-  <style id="splash-screen-style">
-    html {
-      height: 100%
-    }
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContaSync - Tu Asistente Contable</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
     body {
-      margin: 0;
-      min-height: 100%;
-      background-color: #FFFFFF;
-          background-size: 100% 100%;
+      font-family: 'Roboto', sans-serif;
+      color: #333;
     }
-
-    .center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
+    .hero {
+      background: linear-gradient(135deg, #009688, #4DB6AC);
+      color: white;
+      padding: 100px 0;
     }
-
-    .contain {
-      display:block;
-      width:100%; height:100%;
-      object-fit: contain;
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #009688;
     }
-
-    .stretch {
-      display:block;
-      width:100%; height:100%;
+    .cta-section {
+      background-color: #E0F2F1;
+      padding: 50px 0;
     }
-
-    .cover {
-      display:block;
-      width:100%; height:100%;
-      object-fit: cover;
-    }
-
-    .bottom {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      -ms-transform: translate(-50%, 0);
-      transform: translate(-50%, 0);
-    }
-
-    .bottomLeft {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-
-    .bottomRight {
-      position: absolute;
-      bottom: 0;
-      right: 0;
+    .footer {
+      background-color: #004D40;
+      color: white;
+      padding: 30px 0;
     }
   </style>
-  <script id="splash-screen-script">
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.getElementById("splash-branding")?.remove();
-      document.body.style.background = "transparent";
-    }
-  </script>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 </head>
 <body>
-  <picture id="splash">
-      <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
-      <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
-      <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
-  </picture>
-  <script src="flutter_bootstrap.js" async=""></script>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">ContaSync</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#features">Características</a></li>
+          <li class="nav-item"><a class="nav-link" href="#download">Descargar</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
+  <header class="hero text-center">
+    <div class="container">
+      <h1 class="display-4 mb-4" data-aos="fade-up">ContaSync</h1>
+      <p class="lead mb-5" data-aos="fade-up" data-aos-delay="200">Tu asistente contable personal en la palma de tu mano</p>
+      <a href="#download" class="btn btn-light btn-lg" data-aos="fade-up" data-aos-delay="400">Descargar Ahora</a>
+    </div>
+  </header>
 
-</body></html>
+  <section id="features" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Características Principales</h2>
+      <div class="row">
+        <div class="col-md-4 mb-4" data-aos="fade-up">
+          <div class="text-center">
+            <i class="fas fa-shield-alt feature-icon"></i>
+            <h3>Acceso Seguro</h3>
+            <p>Protege tu información financiera con nuestro sistema de seguridad avanzado.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="text-center">
+            <i class="fas fa-chart-line feature-icon"></i>
+            <h3>Contabilidad al Día</h3>
+            <p>Mantén tu contabilidad actualizada y evita sanciones por incumplimiento.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+          <div class="text-center">
+            <i class="fas fa-bell feature-icon"></i>
+            <h3>Alertas Personalizadas</h3>
+            <p>Recibe notificaciones importantes sobre tus obligaciones fiscales.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="download" class="cta-section text-center">
+    <div class="container">
+      <h2 class="mb-4">¿Listo para empezar?</h2>
+      <p class="lead mb-4">Descarga ContaSync ahora y lleva tu contabilidad al siguiente nivel</p>
+      <a href="./app-release.apk" class="btn btn-primary btn-lg" download>
+        <i class="fab fa-android me-2"></i>Descargar para Android
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer text-center">
+    <div class="container">
+      <p>&copy; 2023 ContaSync. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+</html>
