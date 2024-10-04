@@ -123,28 +123,36 @@ class DashboardScreen extends StatelessWidget {
                   shrinkWrap: true,
                   children: [
                     _buildAnimatedInfoCard(
+                      context,
                       'Acceso seguro',
-                      '',
+                      'Garantizamos la seguridad de tus datos con encriptación de última generación.',
                       Icons.security,
                       Colors.teal.shade700,
+                      'seguridad.png',
                     ),
                     _buildAnimatedInfoCard(
+                      context,
                       'Contabilidad al día',
-                      '',
+                      'Mantén tu contabilidad actualizada con nuestras herramientas automatizadas.',
                       Icons.account_balance,
                       Colors.teal.shade600,
+                      'dia.png',
                     ),
                     _buildAnimatedInfoCard(
+                      context,
                       'Alertas personalizadas',
-                      '',
+                      'Recibe notificaciones importantes sobre tu contabilidad y finanzas.',
                       Icons.notifications_active,
                       Colors.teal.shade500,
+                      'alertas.png',
                     ),
                     _buildAnimatedInfoCard(
+                      context,
                       'Planificación anticipada',
-                      '',
+                      'Prepárate para el futuro con nuestras herramientas de planificación financiera.',
                       Icons.event,
                       Colors.teal.shade400,
+                      'planificacion.png',
                     ),
                   ],
                 ),
@@ -157,7 +165,13 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildAnimatedInfoCard(
-      String title, String description, IconData icon, Color color) {
+    BuildContext context,
+    String title,
+    String description,
+    IconData icon,
+    Color color,
+    String imageName,
+  ) {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
       duration: const Duration(milliseconds: 800),
@@ -165,44 +179,68 @@ class DashboardScreen extends StatelessWidget {
       builder: (BuildContext context, double value, Widget? child) {
         return Transform.scale(
           scale: value,
-          child: Card(
-            elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon, size: 40, color: color),
-                  const SizedBox(height: 12),
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.teal.shade800,
-                    ),
-                  ),
-                  if (description.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: Text(
-                        description,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+          child: GestureDetector(
+            onTap: () =>
+                _showInfoDialog(context, title, description, imageName),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, size: 40, color: color),
+                    const SizedBox(height: 12),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.teal.shade800,
                       ),
                     ),
                   ],
-                ],
+                ),
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showInfoDialog(BuildContext context, String title, String description,
+      String imageName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  'assets/img/$imageName',
+                  fit: BoxFit.cover,
+                  height: 200,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(description),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cerrar'),
+            ),
+          ],
         );
       },
     );
