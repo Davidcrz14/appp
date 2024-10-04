@@ -15,27 +15,31 @@ class NewsPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           _buildNewsCard(
-            'Nuevas regulaciones fiscales para 2024',
-            'El gobierno ha anunciado cambios importantes en la legislación fiscal que entrarán en vigor el próximo año...',
+            context,
+            'Gobierno Nacional expidió el Decreto 938 de 2021',
+            'El Gobierno Nacional modificó el marco técnico de las Normas de Información Financiera para el Grupo 1, alineándose con las actualizaciones internacionales del IASB. Este decreto incluye cambios en la clasificación de pasivos y la reforma de la tasa de interés de referencia.',
             Icons.policy,
             Colors.blue,
           ),
           _buildNewsCard(
-            'Actualización de software contable',
-            'La última versión de ContaSync incluye nuevas funcionalidades para facilitar el cierre fiscal...',
-            Icons.update,
+            context,
+            'Nuevo reglamento de retención en la fuente y el impuesto de renta',
+            'El Decreto 2231 de 2023 introduce cambios en la declaración del impuesto sobre la renta y la retención en la fuente para personas naturales. Se destacan las nuevas deducciones por dependientes económicos y los aportes voluntarios a pensiones.',
+            Icons.description,
             Colors.green,
           ),
           _buildNewsCard(
-            'Conferencia anual de contadores',
-            'No te pierdas el evento más importante del año para profesionales de la contabilidad...',
-            Icons.event,
+            context,
+            'Actualización del Anexo Técnico de Información Financiera',
+            'Mediante el Decreto 938 de 2021, se incorporaron mejoras anuales a las Normas NIIF 2018–2020 y la Reforma de la Tasa de Interés de Referencia-Fase 2, afectando el Grupo 1 del Decreto Único Reglamentario 2420 de 2015.',
+            Icons.update,
             Colors.orange,
           ),
           _buildNewsCard(
-            'Cambios en la declaración de IVA',
-            'A partir del próximo trimestre, el formato de declaración de IVA sufrirá modificaciones...',
-            Icons.description,
+            context,
+            'Nuevas reglas para la retención en la fuente sobre rentas de trabajo',
+            'A partir del 22 de diciembre de 2023, la retención en la fuente sobre rentas de trabajo se rige por nuevas reglas establecidas en el Decreto 2231 de 2023, buscando simplificar el proceso y hacerlo más equitativo para los trabajadores independientes.',
+            Icons.work,
             Colors.red,
           ),
         ],
@@ -43,7 +47,7 @@ class NewsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNewsCard(String title, String content, IconData icon, Color color) {
+  Widget _buildNewsCard(BuildContext context, String title, String content, IconData icon, Color color) {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 16),
@@ -73,6 +77,8 @@ class NewsPage extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               content,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 8),
@@ -80,7 +86,7 @@ class NewsPage extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  // Aquí iría la lógica para ver la noticia completa
+                  _showFullNews(context, title, content);
                 },
                 child: const Text('Leer más'),
               ),
@@ -88,6 +94,28 @@ class NewsPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showFullNews(BuildContext context, String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: Text(content),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

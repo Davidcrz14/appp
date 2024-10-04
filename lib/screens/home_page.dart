@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'calendar_page.dart';
 import 'news_page.dart';
 import 'reminders_page.dart';
-import 'calendar_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -96,10 +97,30 @@ class DashboardScreen extends StatelessWidget {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   children: [
-                    _buildAnimatedMenuItem(context, 'Próximos Vencimientos', Icons.event, Colors.red.shade400, () => _showVencimientos(context)),
-                    _buildAnimatedMenuItem(context, 'Últimas Noticias', Icons.newspaper, Colors.blue.shade400, () => _showNoticias(context)),
-                    _buildAnimatedMenuItem(context, 'Recordatorios', Icons.alarm, Colors.orange.shade400, () => _showRecordatorios(context)),
-                    _buildAnimatedMenuItem(context, 'Calendario', Icons.calendar_today, Colors.green.shade400, () => _showCalendario(context)),
+                    _buildAnimatedMenuItem(
+                        context,
+                        'Próximos Vencimientos',
+                        Icons.event,
+                        Colors.red.shade400,
+                        () => _showVencimientos(context)),
+                    _buildAnimatedMenuItem(
+                        context,
+                        'Últimas Noticias',
+                        Icons.newspaper,
+                        Colors.blue.shade400,
+                        () => _showNoticias(context)),
+                    _buildAnimatedMenuItem(
+                        context,
+                        'Recordatorios',
+                        Icons.alarm,
+                        Colors.orange.shade400,
+                        () => _showRecordatorios(context)),
+                    _buildAnimatedMenuItem(
+                        context,
+                        'Calendario',
+                        Icons.calendar_today,
+                        Colors.green.shade400,
+                        () => _showCalendario(context)),
                   ],
                 ),
               ),
@@ -112,7 +133,8 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedMenuItem(BuildContext context, String title, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildAnimatedMenuItem(BuildContext context, String title,
+      IconData icon, Color color, VoidCallback onTap) {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
       duration: const Duration(milliseconds: 500),
@@ -121,7 +143,8 @@ class DashboardScreen extends StatelessWidget {
           scale: value,
           child: Card(
             elevation: 8,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             color: Colors.white,
             child: InkWell(
               onTap: onTap,
@@ -153,19 +176,19 @@ class DashboardScreen extends StatelessWidget {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+      child: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Resumen del día',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
-            const Text('• 2 vencimientos próximos'),
-            const Text('• 3 nuevas noticias contables'),
-            const Text('• 1 recordatorio pendiente'),
+            SizedBox(height: 10),
+            Text('• 2 vencimientos próximos'),
+            Text('• 3 nuevas noticias contables'),
+            Text('• 1 recordatorio pendiente'),
           ],
         ),
       ),
@@ -198,7 +221,8 @@ class DashboardScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Últimas Noticias'),
-          content: const Text('Aquí se mostrarían las últimas noticias contables.'),
+          content:
+              const Text('Aquí se mostrarían las últimas noticias contables.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cerrar'),
@@ -218,7 +242,8 @@ class DashboardScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Recordatorios'),
-          content: const Text('Aquí se mostrarían los recordatorios pendientes.'),
+          content:
+              const Text('Aquí se mostrarían los recordatorios pendientes.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cerrar'),
